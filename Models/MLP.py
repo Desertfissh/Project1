@@ -4,7 +4,9 @@ import torch.nn as nn
 class MLP(nn.Module):
     def __init__(self, in_shape, hidden_shapes, out_shape, activation_function):
         super(MLP, self).__init__()
-        
+        self.in_shape = in_shape
+        self.hidden_shapes = hidden_shapes
+        self.out_shape = out_shape
         self.activation_function = activation_function
 
         layers = []

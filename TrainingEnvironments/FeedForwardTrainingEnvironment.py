@@ -15,14 +15,15 @@ class FeedForwardTrainingEnvironment():
         
         loss_record = []
         accuracy_record = []
-        mean_activation_record = [ [], [], [], [] ]
-        std_layer_activation_record = [ [], [], [], [] ]
+        mean_activation_record = [ [] for layer in range(len(self.Model.hidden_shapes)) ]
+        std_layer_activation_record = [ [] for layer in range(len(self.Model.hidden_shapes)) ]
 
         for epoch in range(self.Epoch):
     
             cum_loss = 0
             correct = 0
-            activation_data = [ [], [], [], [] ]
+            
+            activation_data = [ [] for layer in range(len(self.Model.hidden_shapes)) ]
 
             for batch in range(self.Batches):
 
