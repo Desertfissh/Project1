@@ -5,7 +5,10 @@ class CHLTrainingEnvironment():
         self.Dataset = Dataset
         self.Model = Model
         self.Criterion = Criterion
-        self.Optimizer = Optimizer
+        
+        self.gamma = Optimizer[0]
+        self.lr = Optimizer[1]
+        
         self.Epoch = Epoch
         self.Batches = Batches
         self.Batchsize = Batchsize
@@ -33,7 +36,7 @@ class CHLTrainingEnvironment():
                 
                 free_x = self.Model.freePhase(inputs)
                 clamped_x = self.Model.clampedPhase(inputs, labels)
-                self.Optimizer(free_x, clamped_x)
+                self.Model.update(self, free_x, clamped_x)
         
         print("Successful Pass Through")
 
