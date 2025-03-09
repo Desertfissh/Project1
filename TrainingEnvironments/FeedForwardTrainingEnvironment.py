@@ -27,7 +27,7 @@ class FeedForwardTrainingEnvironment():
 
             for batch in range(self.Batches):
 
-                indices = randint(0, 2, (self.Batchsize,))
+                indices = randint(0, 1028, (self.Batchsize,))
                 inputs, labels = self.Dataset.__getitem__(indices)
 
                 self.Optimizer.zero_grad()
