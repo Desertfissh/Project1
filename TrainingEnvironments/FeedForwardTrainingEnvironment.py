@@ -1,9 +1,10 @@
-from torch import randint, max, cat, mean, std
+import torch
 
 class FeedForwardTrainingEnvironment():
     def __init__(self, Dataset, Model, Criterion, Optimizer, Epoch, Batches, Batchsize):
+        self.Device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.Dataset = Dataset
-        self.Model = Model
+        self.Model = Model.to(self.Device)
         self.Criterion = Criterion
         self.Optimizer = Optimizer
         self.Epoch = Epoch
@@ -27,8 +28,9 @@ class FeedForwardTrainingEnvironment():
 
             for batch in range(self.Batches):
 
-                indices = randint(0, 1028, (self.Batchsize,))
+                indices = torch.randint(0, self.Dataset.num_distributions, (self.Batchsize,))
                 inputs, labels = self.Dataset.__getitem__(indices)
+                inputs, labels = inputs.to(self.Device), labels.to(self.Device)
 
                 self.Optimizer.zero_grad()
                 
@@ -37,7 +39,7 @@ class FeedForwardTrainingEnvironment():
                 for layer in range(len(activation_data)):
                     activation_data[layer].append(activations[layer].to('cpu'))
 
-                _, predictions =  max(output, 1)
+                _, predictions =  torch.max(output, 1)
                 correct += (predictions == labels).float().mean().item()
                 
                 loss = self.Criterion(output, labels)
@@ -49,9 +51,9 @@ class FeedForwardTrainingEnvironment():
             accuracy_record.append(correct/self.Batches)
             for layer in range(len(activation_data)):
 
-                activation_data[layer] = cat(activation_data[layer], 0)
-                mean_activation_record[layer].append(float(mean(activation_data[layer]).data))
-                std_layer_activation_record[layer].append(float(std(activation_data[layer]).data))
+                activation_data[layer] = torch.cat(activation_data[layer], 0)
+                mean_activation_record[layer].append(float(torch.mean(activation_data[layer]).data))
+                std_layer_activation_record[layer].append(float(torch.std(activation_data[layer]).data))
 
             if epoch % 10 == 0:
                 print(f'Epoch {epoch}, Loss: {loss.item():.4f}, Accuracy: {correct/self.Batches:.4f}')
