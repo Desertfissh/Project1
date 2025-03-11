@@ -1,5 +1,5 @@
 #import torch
-from torch import rand, normal, ones, empty
+from torch import rand, normal, ones, empty, abs
 from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
@@ -19,8 +19,8 @@ class GaussianData(Dataset):
 
     def __getitem__(self, index):
         mean = self.midpoints[index]
-        sample = normal(mean=mean, std= (1/16) * ones(self.num_dimensions))
-
+        sample = abs(normal(mean=mean, std= (1/16) * ones(self.num_dimensions)))
+        
         return sample, index
 
     def showData(self):

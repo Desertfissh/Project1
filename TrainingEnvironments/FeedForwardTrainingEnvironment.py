@@ -55,7 +55,7 @@ class FeedForwardTrainingEnvironment():
                 mean_activation_record[layer].append(float(torch.mean(activation_data[layer]).data))
                 std_layer_activation_record[layer].append(float(torch.std(activation_data[layer]).data))
 
-            if epoch % 10 == 0:
-                print(f'Epoch {epoch}, Loss: {loss.item():.4f}, Accuracy: {correct/self.Batches:.4f}')
+            #if epoch % 10 == 0:
+                #print(f'Epoch {epoch}, Loss: {loss.item():.4f}, Accuracy: {correct/self.Batches:.4f}')
         
         return loss_record, accuracy_record, mean_activation_record, std_layer_activation_record
