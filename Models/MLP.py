@@ -1,4 +1,4 @@
-from torch import stack
+import torch
 import torch.nn as nn
 
 class MLP(nn.Module):
@@ -19,6 +19,13 @@ class MLP(nn.Module):
         layers.append(nn.Linear(prev_shape, out_shape))
         self.network = nn.Sequential(*layers)
 
+        for l in self.network:
+            if isinstance(l, torch.nn.Linear):
+                nn.init.uniform_(l.weight, a=.25, b=.75)
+                if l.bias is not None:
+                    l.bias.detach().zero_()
+
+
     def forward(self, x):
         
         activations = []
@@ -28,7 +35,7 @@ class MLP(nn.Module):
             if isinstance(l, self.activation_function):
                 activations.append(x)
         
-        activations = stack(activations, 0)
+        activations = torch.stack(activations, 0)
         
         return x, activations
     

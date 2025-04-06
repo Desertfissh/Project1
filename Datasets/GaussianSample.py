@@ -4,26 +4,21 @@ from torch.utils.data import Dataset
 import matplotlib.pyplot as plt
 
 class GaussianData(Dataset):
-    def __init__(self, num_distributions, num_dimensions=2):
-        super().__init__()
-        
-        self.num_distributions = num_distributions
-        self.num_dimensions = num_dimensions
-
-        self.midpoints = empty(num_distributions, num_dimensions)
-        for n in range(num_distributions):
-            self.midpoints[n] = (-.5) * rand(num_dimensions) + .75
+    def __init__(self, midpoints):
+        super().__init__()        
+        self.midpoints= midpoints
 
     def __len__(self):
-        return (self.num_distributions, self.num_dimensions)
+        return self.midpoints.size()[0]
 
     def __getitem__(self, index):
         mean = self.midpoints[index]
-        sample = abs(normal(mean=mean, std= (1/16) * ones(self.num_dimensions)))
+        sample = abs(normal(mean=mean, std= (1/16) * ones(len(self))))
         
         return sample, index
 
     def showData(self):
+        
         if self.num_dimensions == 2:
             for dist in range(self.num_distributions):
                 index = dist * ones(100, dtype=int)

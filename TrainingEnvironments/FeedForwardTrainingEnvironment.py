@@ -31,7 +31,7 @@ class FeedForwardTrainingEnvironment():
 
             for batch in range(self.Batches):
 
-                indices = torch.randint(0, self.Dataset.num_distributions, (self.Batchsize,))
+                indices = torch.randint(0, len(self.Dataset), (self.Batchsize,))
                 inputs, labels = self.Dataset.__getitem__(indices)
                 inputs, labels = inputs.to(self.Device), labels.to(self.Device)
 
