@@ -26,16 +26,19 @@ class MLP(nn.Module):
                     l.bias.detach().zero_()
 
 
-    def forward(self, x):
+    def forward(self, x, activation=False):
         
-        activations = []
+        if activation: activations = []
 
         for l in self.network:
             x = l(x)
-            if isinstance(l, self.activation_function):
-                activations.append(x)
+            
+            if activation and isinstance(l, self.activation_function): activations.append(x)
         
-        activations = torch.stack(activations, 0)
-        
-        return x, activations
+
+        if activation: 
+            activations = torch.stack(activations, 0)
+            return x, activations
+        else: 
+            return x
     
